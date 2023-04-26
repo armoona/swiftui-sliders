@@ -67,6 +67,28 @@ extension RangeSlider {
     }
 }
 
+extension RangeSlider {
+    public init(value: Binding<ClosedRange<Measurement<UnitLength>>>, in bounds: ClosedRange<Measurement<UnitLength>>, step: Measurement<UnitLength>, onEditingChanged: @escaping (Bool) -> Void = { _ in }) {
+        
+        self.init(
+            RangeSliderStyleConfiguration(
+                range: Binding(get: {
+                    CGFloat(value.wrappedValue.lowerBound.converted(to: step.unit).value)...CGFloat(value.wrappedValue.upperBound.converted(to: step.unit).value)
+                },
+                set: {
+                    value.wrappedValue = Measurement(value: Double($0.lowerBound), unit: step.unit)...Measurement(value: Double($0.upperBound), unit: step.unit)
+                }),
+                bounds: CGFloat(bounds.lowerBound.converted(to: step.unit).value)...CGFloat(bounds.upperBound.converted(to: step.unit).value),
+                step: CGFloat(step.value),
+                distance: 0.0 ... 1.0,
+                onEditingChanged: onEditingChanged,
+                dragOffset: .constant(0)
+            )
+        )
+    }
+}
+
+
 struct RangeSlider_Previews: PreviewProvider {
     static var previews: some View {
         Group {

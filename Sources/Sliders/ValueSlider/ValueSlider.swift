@@ -68,6 +68,26 @@ extension ValueSlider {
     }
 }
 
+extension ValueSlider {
+    public init(value: Binding<Measurement<UnitMass>>, in bounds: ClosedRange<Measurement<UnitMass>>, step: Measurement<UnitMass>, onEditingChanged: @escaping (Bool) -> Void = { _ in }) {
+        
+        self.init(
+            ValueSliderStyleConfiguration(
+                value: Binding(get: {
+                    CGFloat(value.wrappedValue.value)
+                },
+                set: {
+                    value.wrappedValue = Measurement<UnitMass>(value: Double($0), unit: value.wrappedValue.unit)
+                }),
+                bounds: CGFloat(bounds.lowerBound.value)...CGFloat(bounds.upperBound.value),
+                step: CGFloat(step.value),
+                onEditingChanged: onEditingChanged,
+                dragOffset: .constant(0)
+            )
+        )
+    }
+}
+
 
 struct ValueSlider_Previews: PreviewProvider {
     static var previews: some View {
