@@ -68,19 +68,19 @@ extension RangeSlider {
 }
 
 extension RangeSlider {
-    public init(value: Binding<ClosedRange<Measurement<UnitLength>>>, in bounds: ClosedRange<Measurement<UnitLength>>, step: Measurement<UnitLength>, onEditingChanged: @escaping (Bool) -> Void = { _ in }) {
+    public init(range: Binding<ClosedRange<Measurement<UnitLength>>>, in bounds: ClosedRange<Measurement<UnitLength>>, step: Measurement<UnitLength>, distance: ClosedRange<Measurement<UnitLength>>, onEditingChanged: @escaping (Bool) -> Void = { _ in }) {
         
         self.init(
             RangeSliderStyleConfiguration(
                 range: Binding(get: {
-                    CGFloat(value.wrappedValue.lowerBound.converted(to: step.unit).value)...CGFloat(value.wrappedValue.upperBound.converted(to: step.unit).value)
+                    CGFloat(range.wrappedValue.lowerBound.converted(to: step.unit).value)...CGFloat(range.wrappedValue.upperBound.converted(to: step.unit).value)
                 },
                 set: {
-                    value.wrappedValue = Measurement(value: Double($0.lowerBound), unit: step.unit)...Measurement(value: Double($0.upperBound), unit: step.unit)
+                    range.wrappedValue = Measurement(value: Double($0.lowerBound), unit: step.unit)...Measurement(value: Double($0.upperBound), unit: step.unit)
                 }),
                 bounds: CGFloat(bounds.lowerBound.converted(to: step.unit).value)...CGFloat(bounds.upperBound.converted(to: step.unit).value),
                 step: CGFloat(step.value),
-                distance: 0.0 ... 1.0,
+                distance: CGFloat(distance.lowerBound.converted(to: step.unit).value)...CGFloat(distance.upperBound.converted(to: step.unit).value),
                 onEditingChanged: onEditingChanged,
                 dragOffset: .constant(0)
             )
