@@ -74,12 +74,12 @@ extension ValueSlider {
         self.init(
             ValueSliderStyleConfiguration(
                 value: Binding(get: {
-                    CGFloat(value.wrappedValue.value)
+                    CGFloat(value.wrappedValue.converted(to: step.unit).value)
                 },
                 set: {
-                    value.wrappedValue = Measurement<UnitMass>(value: Double($0), unit: value.wrappedValue.unit)
+                    value.wrappedValue = Measurement(value: Double($0), unit: step.unit)
                 }),
-                bounds: CGFloat(bounds.lowerBound.value)...CGFloat(bounds.upperBound.value),
+                bounds: CGFloat(bounds.lowerBound.converted(to: step.unit).value)...CGFloat(bounds.upperBound.converted(to: step.unit).value),
                 step: CGFloat(step.value),
                 onEditingChanged: onEditingChanged,
                 dragOffset: .constant(0)
